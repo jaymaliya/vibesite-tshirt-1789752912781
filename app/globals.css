@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg:             #F7F4EF;
+  --surface:        #2C2C2C;
+  --secondary:      #2C2C2C;
+  --primary:        #1A1A1A;
+  --primary-glow:   #6a6a6a;
+  --accent:         #C97B4B;
+  --text:           #0F0F0F;
+  --muted:          #9A8A7A;
+  --success:        #22c55e;
+  --danger:         #ef4444;
+  --font-heading:   "Fraunces", sans-serif;
+  --font-body:      "DM Sans", sans-serif;
+  --heading-weight: 600;
+
+  /* Gradients — use for hero scrims / accent panels (never purple-blue) */
+  --gradient-hero:    linear-gradient(135deg, #1A1A1A, #5a5a5a);
+  --gradient-subtle:  linear-gradient(180deg, #F7F4EF, #2C2C2C);
+
+  /* Glow + tinted elevation scale (shadows tinted with the brand primary) */
+  --glow:        0 0 48px #1A1A1A29;
+  --shadow-xs:   0 1px 2px #1A1A1A0f;
+  --shadow-sm:   0 2px 10px #1A1A1A14;
+  --shadow-md:   0 10px 28px #1A1A1A1f;
+  --shadow-lg:   0 18px 44px #1A1A1A24;
+  --shadow-xl:   0 28px 64px #1A1A1A2e;
+
+  /* Radius scale (personality-derived) + spacing rhythm */
+  --radius-sm:   3px;
+  --radius-md:   6px;
+  --radius-lg:   10px;
+  --radius-pill: 9999px;
+  --space-section: 120px;
+  --space-card:    2.5rem;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5, h6 { font-family: "Fraunces", sans-serif; line-height: 1.15; }
+/* @tailwind base (Preflight) resets heading font-size/weight to inherit — restore sensible defaults
+   so any heading that isn't explicitly sized still reads as a heading. Inline/utility sizes override. */
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: var(--heading-weight); }
+h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); font-weight: var(--heading-weight); }
+h3 { font-size: 1.25rem; font-weight: 600; }
+
+/* ===== SCROLL REVEAL ANIMATIONS ===== */
+.reveal { transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.will-reveal { opacity: 0; transform: translateY(24px); }
+.reveal.visible { opacity: 1 !important; transform: translateY(0) !important; }
+
+/* ===== TOAST SLIDE-IN ANIMATION ===== */
+@keyframes slideInRight { 
+  from { opacity: 0; transform: translateX(60px); } 
+  to { opacity: 1; transform: translateX(0); } 
+}
+.toast-slide-in { animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* ===== BUTTON HOVER LIFT (PREMIUM SCALE + SHADOW) ===== */
+.btn-lift { 
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
+  cursor: pointer; 
+}
+.btn-lift:hover { 
+  transform: scale(1.02); 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); 
+}
+.btn-lift:active { 
+  transform: scale(0.98); 
+}
+.btn-lift:focus-visible { 
+  outline: 2px solid currentColor; 
+  outline-offset: 3px; 
+}
+
+/* ===== CARD HOVER SCALE (LIFT + LAYERED SHADOW FOR DEPTH) ===== */
+.card-hover { 
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+.card-hover:hover { 
+  transform: translateY(-4px); 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.08), 0 20px 48px rgba(0, 0, 0, 0.06); 
+}
+
+/* ===== SHIMMER LOADING SKELETON ===== */
+@keyframes shimmer { 
+  0% { background-position: -200% 0; } 
+  100% { background-position: 200% 0; } 
+}
+.skeleton { 
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); 
+  background-size: 200% 100%; 
+  animation: shimmer 1.5s infinite; 
+  border-radius: 8px; 
+}
+
+/* ===== SMOOTH PAGE FADE ===== */
+@keyframes pageFade { 
+  from { opacity: 0; } 
+  to { opacity: 1; } 
+}
+.page-enter { animation: pageFade 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* ===== STAGGERED REVEAL FOR CARD GRIDS ===== */
+/* Add .reveal-stagger to grid parent — only animates when .visible is added by IntersectionObserver */
+.reveal-stagger.visible > * { 
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+.reveal-stagger.will-reveal > * { 
+  opacity: 0; 
+  transform: translateY(20px); 
+}
+.reveal-stagger.visible > *:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0ms; }
+.reveal-stagger.visible > *:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 80ms; }
+.reveal-stagger.visible > *:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 160ms; }
+.reveal-stagger.visible > *:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 240ms; }
+.reveal-stagger.visible > *:nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 320ms; }
+.reveal-stagger.visible > *:nth-child(6) { opacity: 1; transform: translateY(0); transition-delay: 400ms; }
+
+/* ===== KEYBOARD FOCUS RINGS (ACCESSIBILITY) ===== */
+*:focus-visible { 
+  outline: 2px solid var(--primary, #333); 
+  outline-offset: 3px; 
+  border-radius: 4px; 
+}
+*:focus:not(:focus-visible) { 
+  outline: none; 
+}
+
+/* ===== MOBILE RESPONSIVE HELPERS ===== */
+@media (max-width: 768px) {
+  .hide-mobile { 
+    display: none !important; 
+  }
+  .stack-mobile { 
+    flex-direction: column !important; 
+  }
+  .full-mobile { 
+    width: 100% !important; 
+  }
+  .text-center-mobile { 
+    text-align: center !important; 
+  }
+}
+/* ── vaani.ai Pipeline: Mobile Safety Net (deterministic — never overflows) ── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: hidden; max-width: 100%; }
+/* THE #1 fix: let flex/grid children shrink instead of forcing horizontal overflow */
+* { min-width: 0; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+
+@media (max-width: 767px) {
+  /* Force ANY inline/utility multi-column grid to a single column on phones (structural reflow) */
+  [style*="grid-template-columns"], [style*="gridTemplateColumns"],
+  .grid, [class*="grid-cols-"] { grid-template-columns: 1fr !important; }
+  /* Nav: wrap so links don't get cut off */
+  nav { height: auto !important; min-height: 56px !important; flex-wrap: wrap !important; padding-top: 6px !important; padding-bottom: 6px !important; align-items: center; }
+  nav > div, nav > ul { flex-wrap: wrap !important; gap: 8px !important; }
+  /* Buttons: wrap, never clip, ≥44px tap target */
+  button, a[role="button"] { white-space: normal !important; word-break: break-word; max-width: 100%; min-height: 44px; box-sizing: border-box; }
+  /* Inputs always fill container */
+  input, textarea, select { width: 100% !important; box-sizing: border-box !important; max-width: 100%; }
+  /* Tame oversized fixed-px widths so nothing exceeds the viewport */
+  [style*="width:"][style*="px"] { max-width: 100% !important; }
+}
